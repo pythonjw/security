@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--与某一个mapper接口关联,写全限定名称-->
+<mapper namespace="com.pjw.mapper.MyUserDetailsMapper">
+
+    <select id="selectUser" resultType="com.pjw.entity.MyUserDetails">
+        select * from t_user where USER_NAME=#{userName};
+    </select>
+
+</mapper>
