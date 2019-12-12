@@ -2,6 +2,7 @@ package com.pjw.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -13,6 +14,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 
 @Configuration
+//@EnableGlobalMethodSecurity(securedEnabled = true) //启用Spring Security的@Secured注解
+@EnableGlobalMethodSecurity(prePostEnabled = true) //启用Spring Security的@PreAuthorize,在类或者方法上使用
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     //定义用户信息服务
@@ -41,12 +44,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             .authorizeRequests()
             .antMatchers("/hello/*").authenticated()  //所有 /hello/**需要通过认证
             .antMatchers("/game/*").hasAuthority("p2")    //通过认证之后需要有p2权限
+                //.antMatchers("/game/*").access("hasAuthority('p1') and hasAuthority('p2')")//通过认证之后需要有p1和p2权限
+//             .antMatchers("/game/*").hasAnyAuthority("p1","p2")//有p1或p2就通过
             .anyRequest().permitAll()   //通过请求不需要认证
             .and()
             .formLogin()//允许表单登录
             // .loginPage("/login-page")//自定义登录地址
             //.loginProcessingUrl("/login-process")//自定义登录处理地址
-            .successForwardUrl("/login-success")  //自定义登录成功的地址 ,controller应该是post
+//            .successForwardUrl("/login-success")  //自定义登录成功的地址 ,controller应该是post
         .and()
         .sessionManagement()//会话控制，我们可以通过以下选项准确控制会话合适创建以及Spring Security如何与之交互
                             //always:如果没有session存在就创建一个

@@ -24,10 +24,12 @@ public class MyUserDetailsService implements UserDetailsService {
             return null;
         }else{
             MyUserDetails myUserDetails=list.get(0);
-            System.out.println(myUserDetails);
             //将来连接数据库根据账号查询用户信息
             //暂时采用模拟方式
-            UserDetails userDetails= User.withUsername(myUserDetails.getUserName()).password(myUserDetails.getPassWord()).authorities("p1").build();
+            List<String> permissionCode=myUserDetailsMapper.selectPermissionByUserName(userName);
+            String[] permissionCodeArr=new String[permissionCode.size()];
+            permissionCode.toArray(permissionCodeArr);
+            UserDetails userDetails= User.withUsername(myUserDetails.getUserName()).password(myUserDetails.getPassWord()).authorities(permissionCodeArr).build();
             return userDetails;
         }
     }

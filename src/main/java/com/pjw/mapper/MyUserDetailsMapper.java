@@ -9,4 +9,5 @@ import java.util.List;
 @Mapper
 public interface MyUserDetailsMapper {
     List<MyUserDetails> selectUser(@Param("userName") String userName);
+    List<String> selectPermissionByUserName(@Param("userName") String userName);
 }

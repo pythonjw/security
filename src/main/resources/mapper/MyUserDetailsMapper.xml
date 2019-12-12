@@ -1,11 +1,28 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<!--与某一个mapper接口关联,写全限定名称-->
 <mapper namespace="com.pjw.mapper.MyUserDetailsMapper">
 
     <select id="selectUser" resultType="com.pjw.entity.MyUserDetails">
-        select * from t_user where USER_NAME=#{userName};
+        select *
+        from t_user
+        where USER_NAME = #{userName};
     </select>
-
+    <select id="selectPermissionByUserName" resultType="java.lang.String">
+        select gm.code
+        from t_permission as gm
+        where gm.id in (
+            select gs3.permission_id
+            from t_role_permission as gs3
+            where gs3.role_id in (
+                select gs2.role_id
+                from t_role_user as gs2
+                where gs2.user_id = (
+                    select gs1.id
+                    from t_user as gs1
+                    where gs1.USER_NAME = #{userName}
+                )
+            )
+        )
+    </select>
 </mapper>
